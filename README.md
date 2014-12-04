@@ -8,8 +8,8 @@ A smart house for dumb people
 - Displays our stats for the New York Times crossword puzzle
 
 The electric imp code that interacts with the thermostat and garage door aren't in this repo because it contains passwords and sensitive URLs. If you're interested in that part, contact us or read about it here:
-http://rcoh.svbtle.com/how-i-automated-my-garage-door
-http://rcoh.svbtle.com/make-your-own-internet-connected-thermostat
+- http://rcoh.svbtle.com/how-i-automated-my-garage-door
+- http://rcoh.svbtle.com/make-your-own-internet-connected-thermostat
 
 Setup
 =====
