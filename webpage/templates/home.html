@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% set active_page = "home" %}
+{% block content %}
+  <div class="jumbotron">
+    <h1>Welcome to 735 Roosevelt</h1>
+    <h3>A smart house for dumb people</h3>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+      <img src="{{url_for('static', filename='images/russell-tetris.jpg')}}" width="400"/>
+  </div>
+{% endblock %}

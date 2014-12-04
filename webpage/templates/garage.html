@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% set active_page = "garage" %}
+
+{% block style %}
+<style>
+    .jumbotron {
+        padding-top: 15px;
+    }
+    .jumbotron h1 {
+        font-size: 48px;
+    }
+    .jumbotron h2 {
+        font-size: 26px;
+    }
+    .jumbotron button {
+        font-size: 30px;
+        margin: 0px 3px;
+    }
+    .buttons {
+        margin-top: 20px;
+    }
+    .password-div {
+        margin: 30px 0 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1>Garage is <b><span id="garage-status">loading...</span></b></h1>
+
+    <div class="password-div">
+        <label for="password">Enter password to open/close garage: </label>
+        <input type="password" id="password"/>
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-success" id="open-sesame">Open</button>
+        <button class="btn btn-danger" id="close-sesame">Close</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomscript %}
+<script>
+var GARAGE_URL = "https://agent.electricimp.com/Hv7jUmBWgbw8";
+function garageStatus() {
+	$.ajax(GARAGE_URL + "/status", { dataType: "json" }).done(
+	function(data) {
+		$('#garage-status').text(data['door']['state']);
+	});
+}
+
+$(garageStatus);
+</script>
+{% endblock %}
+

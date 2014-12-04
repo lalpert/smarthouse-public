@@ -1,0 +1,9 @@
+# Don't commit passwords!
+passwords.py
+passwords.js
+
+# Other things...
+*.pyc
+*.swp
+*.swo
+.DS_Store

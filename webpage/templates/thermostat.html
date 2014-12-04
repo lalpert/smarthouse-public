@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% set active_page = "thermostat" %}
+{% block style %}
+<style>
+    .jumbotron {
+        padding-top: 15px;
+    }
+    .jumbotron h1 {
+        font-size: 48px;
+    }
+    .jumbotron h2 {
+        font-size: 26px;
+    }
+    .jumbotron button {
+        font-size: 30px;
+        margin: 0px 3px;
+    }
+    .buttons {
+        margin-top: 20px;
+    }
+    .password-div {
+        margin: 30px 0 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    
+    <h1>Inside:</h1>
+    <h2 id="temp">
+        loading...
+    </h2>
+
+    <h1>Outside:</h1>
+    <h2 id="outtemp">
+        loading...
+    </h2>
+
+    <h1>Setpoint: </h1>
+    <h2 id="setpoint">
+        loading...
+    </h2>
+
+    <h1>Heat is: </h1>
+    <h2 id="heaton">
+        loading...
+    </h2>
+
+    <div class="password-div">
+        <label for="password">Enter password to change setpoint: </label>
+        <input type="password" id="password"/>
+    </div>
+
+    <div class="buttons">
+        <button class="btn quick" id="set">60</button>
+        <button class="btn quick" id="set">68</button>
+        <button class="btn quick" id="set">71</button>
+        <button class="btn btn-danger" id="plus">Hotter</button>
+        <button id="minus"  class="btn btn-info">Colder</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomscript %}
+<script>
+    var format_num = function(num, round) {
+        if (round) {
+            num = parseFloat(num).toFixed(1);
+        }
+        return num + " °F";
+    }
+    console.log("running script");
+    var status_url = "https://agent.electricimp.com/Zik1cm6CNOlE/status";
+    var set_url = "https://agent.electricimp.com/Zik1cm6CNOlE/set";
+    var update_settings = function() {
+        $.ajax(status_url, {
+            "dataType": "json"
+        })
+        .done(function(data) {
+            $('#temp').text(format_num(data['temp'], true));
+            $('#setpoint').text(format_num(data['setpoint'], false));
+            if (data['heat'] == 0) {
+                $('#heaton').text("Off");
+            } else {
+                $('#heaton').text("On");
+            }
+        });
+    };
+
+    var update_outside = function() {
+        var wunderground_url = "http://www.corsproxy.com/api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json";
+        $.get(wunderground_url, {
+           dataType: "json"
+        }).done(function(data) {
+            $('#outtemp').text(format_num(data['current_observation']['temp_f'], true));
+        });
+    }
+
+    var get_json = function(temp) {
+        return { password: $('#password').val(), temp: temp + ''};
+    }
+
+    var set_temp = function(temp) {
+        var json = get_json(temp);
+        $.ajax(set_url, {data: JSON.stringify(json), dataType: "json", method: "POST"});
+    }
+    var update_setpoint = function(diff) {
+        var current = parseInt($('#setpoint').text());
+        var password = $('#password').val();
+        $('#setpoint').text(format_num(current += diff, false));
+        set_temp(current);
+    }
+
+    $('#plus').on("click", function(event) {
+        update_setpoint(1);
+    });
+
+    $('#minus').on("click", function(event) {
+        update_setpoint(-1);
+    });
+
+    $('.quick').on("click", function(event) {
+        set_temp($(this).text());
+        $('#setpoint').text(format_num($(this).text(), false));
+    });
+
+    $(update_settings);
+    $(update_outside);
+    window.setInterval(update_settings, 5000);
+    window.setInterval(update_outside, 5 * 60 * 1000);
+</script>
+{% endblock %}
+

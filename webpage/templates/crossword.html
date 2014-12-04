@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% set active_page = "crossword" %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<script src="{{url_for('static', filename='Chart.min.js')}}"></script>
+<h1>New York Times crossword stats</h1>
+<table class="table table-striped">
+    <tr>
+        <th>Day</th>
+        <th># Completed</th>
+        <th>Avg time</th>
+        <th>Best time</th>
+        <th>Avg # wrong</th>
+    </tr>
+
+    {% for row in data %}
+    <tr>
+        <th>{{ row.day }}</th>
+        <th>{{ row.num_complete }}</th>
+        <th>{{ row.avg_time }}</th>
+        <th>{{ row.best_time }}</th>
+        <th>{{ row.num_wrong }}</th>
+    </tr>
+    {% endfor %}
+    <!-- <canvas id="myChart" width="400" height="400"></canvas> -->
+{% endblock %}
+
+{% block bottomscript %}
+<script>
+/*
+    // Get the context of the canvas element we want to select
+console.log({{ charData }});
+    var data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+    ]
+};
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myNewChart = new Chart(ctx).Line(data); 
+*/
+</script>
+{% endblock %}
+
