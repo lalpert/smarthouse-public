@@ -3,7 +3,9 @@ Smarthouse
 
 A smart house for dumb people
 
-- Displays current temperature in our house and controls thermostat 
+Check it out at 735roosevelt.com
+
+- Displays current temperature in our house and controls the thermostat 
 - Displays whether garage door is open or closed, and can open/close garage door
 - Displays our stats for the New York Times crossword puzzle
 
@@ -14,30 +16,9 @@ http://rcoh.svbtle.com/make-your-own-internet-connected-thermostat
 Setup
 =====
 
-To run on a server, you'll need to install mysql and some related tools:
-```
-sudo apt-get install mysql-server
-sudo apt-get install mysql-client
-sudo apt-get install libmysqlclient-dev
-sudo apt-get install python-mysqldb
-sudo apt-get install python-dev
-```
+To set up on a server, download the setup script and run 
+`sudo ./setup.sh`
+This will download the repository and other needed packages.
 
-Then install the python packages needed:
-```
-pip install -r requirements.txt
-```
-
-To set up the database:
-```
-CREATE DATABASE smarthouse;
-use smarthouse;
-
-CREATE TABLE crosswords(
- id INT NOT NULL AUTO_INCREMENT,
- date DATE NOT NULL,
- seconds_taken INT NOT NULL,
- num_wrong INT NOT NULL,
- PRIMARY KEY(id)
- );
-```
+To run the website on port 80, run
+`sudo python smarthouse-public/webpage/app.py`
