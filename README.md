@@ -3,7 +3,7 @@ Smarthouse
 
 A smart house for dumb people
 
-Check it out at 735roosevelt.com
+Check it out at [735roosevelt.com](http://735roosevelt.com/) 
 
 - Displays current temperature in our house and controls the thermostat 
 - Displays whether garage door is open or closed, and can open/close garage door
