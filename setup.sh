@@ -5,8 +5,8 @@
 # Run script with sudo. Script will prompt for MySQL password.
 
 # Clone public and private repos (private will fail if you don't have access)
-git clone git@github.com:lalpert/smarthouse-public.git
-git clone git@github.com:lalpert/smarthouse-private.git
+git clone https://github.com/lalpert/smarthouse-public.git
+git clone https://github.com/lalpert/smarthouse-private.git
 
 # Make symlinks so public code can access private passwords
 ln -s `pwd`/smarthouse-private/passwords.py `pwd`/smarthouse-public/webpage/
