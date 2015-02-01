@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, date
 from collections import defaultdict
+import traceback
 
 from flask import Flask
 from flask import render_template
@@ -65,13 +66,20 @@ def crossword():
         AVG(num_wrong),
         WEEKDAY(date) as day_num
         FROM crosswords
-
         GROUP BY DAYNAME(date)
         ORDER BY WEEKDAY(date);"""
 
     cursor = mysql.connect().cursor()
     cursor.execute(query)
-    data = cursor.fetchall()
+
+    try:
+        cursor.execute(query)
+        data = cursor.fetchall()
+    except mysql.connector.Error as e:
+        print e
+        print traceback.format_exc()
+        data = []
+        
 
     all_days = []
     for row in data:
