@@ -85,10 +85,13 @@ def crossword():
         all_days.append(d)
 
     data = get_graph_data()
+    print "data", data
     graph_data = defaultdict(list)
 
     for (day_name, date, seconds) in data:
         graph_data[day_name].append((date.isoformat(), seconds))
+
+    print "graph_data", graph_data
 
     return render_template('crossword.html', table_data=all_days, graph_data=graph_data)
 
