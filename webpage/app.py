@@ -1,8 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+from collections import defaultdict
 
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import jsonify
 from flaskext.mysql import MySQL
 
 import database_setup
@@ -13,6 +15,8 @@ app = Flask(__name__)
 # Add the database password, username, etc
 database_setup.add_config_params(app)
 mysql.init_app(app)
+
+DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 @app.route("/")
 def home():
@@ -35,6 +39,21 @@ def format_time(num_seconds):
     delta = timedelta(seconds=rounded_seconds)
     return str(delta)
 
+def get_graph_data():
+    query = """
+        SELECT 
+        DAYNAME(date) as day_name,
+        date,    
+        seconds_taken
+        FROM crosswords
+        ORDER BY date;
+    """
+    cursor = mysql.connect().cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+
+    return data
+    
 @app.route("/crossword")
 def crossword():
     query = """
@@ -53,7 +72,6 @@ def crossword():
     cursor = mysql.connect().cursor()
     cursor.execute(query)
     data = cursor.fetchall()
-    print data
 
     all_days = []
     for row in data:
@@ -66,7 +84,13 @@ def crossword():
             }
         all_days.append(d)
 
-    return render_template('crossword.html', data=all_days)
+    data = get_graph_data()
+    graph_data = defaultdict(list)
+
+    for (day_name, date, seconds) in data:
+        graph_data[day_name].append((date.isoformat(), seconds))
+
+    return render_template('crossword.html', table_data=all_days, graph_data=graph_data)
 
 def dataForDay(day):
     query = """
