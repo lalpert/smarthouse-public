@@ -66,8 +66,8 @@ def crossword():
         WEEKDAY(date) as day_num
         FROM crosswords
 
-        GROUP BY day_name
-        ORDER BY day_num;"""
+        GROUP BY DAYNAME(date)
+        ORDER BY WEEKDAY(date);"""
 
     cursor = mysql.connect().cursor()
     cursor.execute(query)
