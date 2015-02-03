@@ -1,11 +1,13 @@
 // Run with: casperjs --web-security=false casper_stats.js 
 var casper = require('casper').create();
 var utils = require('utils');
+
 // This will be symlinked from a private repo
 var passwords = require('../passwords.js');
 var timeValue;
 var numWrong;
 
+// Add a given number of days to a JS date
 Date.prototype.addDays = function(days) {
     var dat = new Date(this.valueOf())
     dat.setDate(dat.getDate() + days);
@@ -33,7 +35,7 @@ casper.thenEvaluate(function(){
 });
 
 // Scrape crosswords, starting with today and going back 1 day at a time
-var numDays = 3;
+var numDays = 7;
 var count = 0;
 console.log("Starting scraping");
 casper.repeat(numDays, function() {
@@ -59,9 +61,9 @@ casper.repeat(numDays, function() {
     casper.thenOpen(crosswordUrl, function() {
         this.echo("Opened crossword");
 
-        // Wait 5 seconds to give everything on page time to load
-        this.wait(5000, function() {
-            this.echo("I've waited for a second or 5.");
+        // Wait a few seconds to give everything on page time to load
+        this.wait(4000, function() {
+            this.echo("I've waited for a second or 4.");
             timeValue = casper.evaluate(function() {
                 timerDiv = document.getElementsByClassName("timer-count")[0];
                 timeString = timerDiv.innerHTML;
