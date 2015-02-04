@@ -4,6 +4,14 @@
 # It clones the git repos, downloads needed packages, and sets up the database.
 # Run script with sudo. Script will prompt for MySQL password.
 
+# TODO: install casperjs
+
+# Get newest version of packages and install git, pip, and phanom
+apt-get update
+apt-get install git
+apt-get install python-pip
+apt-get install phantomjs
+
 # Clone public and private repos (private will fail if you don't have access)
 git clone https://github.com/lalpert/smarthouse-public.git
 git clone https://github.com/lalpert/smarthouse-private.git
