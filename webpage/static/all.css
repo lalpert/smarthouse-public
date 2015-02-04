@@ -1,0 +1,8 @@
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  cursor:pointer;
+}
+
+.selected-row {
+  background-color: red !important;
+}
