@@ -89,7 +89,7 @@
     };
 
     var update_outside = function() {
-        var wunderground_url = "http://www.corsproxy.com/api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json";
+        var wunderground_url = "http://api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json";
         $.get(wunderground_url, {
            dataType: "json"
         }).done(function(data) {

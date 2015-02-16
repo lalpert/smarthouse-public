@@ -144,7 +144,6 @@ def add_crossword():
     cxn.commit()
     return "done"
 
-
 if __name__ == "__main__":
-    # TODO: put it front of a real webserver at some point
+    # TODO: put it behind a real webserver at some point
     app.run(host='0.0.0.0', port=80, threaded=True, debug=True)
