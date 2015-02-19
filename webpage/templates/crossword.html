@@ -54,7 +54,11 @@
       // Change string dates to JS objects, change seconds to minutes
       for (var day in graph_data) {
           graph_data[day] = graph_data[day].map(function(dat) {
-              return [new Date(dat[0] + " GMT-0700"), dat[1]/60];
+              // Parse the date in GMT, add 1 day to get to PST
+              // Javascript is literally the worst
+              var date = new Date(dat[0] + " GMT");
+              date.setDate(date.getDate() + 1);
+              return [date, dat[1]/60];
           });
       }
 
