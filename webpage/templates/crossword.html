@@ -54,7 +54,7 @@
       // Change string dates to JS objects, change seconds to minutes
       for (var day in graph_data) {
           graph_data[day] = graph_data[day].map(function(dat) {
-              return [new Date(dat[0]), dat[1]/60];
+              return [new Date(dat[0] + " GMT-0700"), dat[1]/60];
           });
       }
 
