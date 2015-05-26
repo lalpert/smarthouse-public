@@ -54,6 +54,30 @@ def get_graph_data():
     data = cursor.fetchall()
 
     return data
+
+def median():
+    query = """
+    SELECT x.seconds_taken from crosswords x, crosswords y
+    WHERE WEEKDAY(x.date) = %d
+    GROUP BY x.val
+    HAVING SUM(SIGN(1-SIGN(y.val-x.val)))/COUNT(*) > .5
+    LIMIT 1
+    """
+    result = {}
+    for day in range(7):
+        day_query = query % day
+        cursor = mysql.connect().cursor()
+        cursor.execute(query)
+
+        try:
+            cursor.execute(query)
+            data = cursor.fetchall()
+            result[day] = data
+        except mysql.connector.Error as e:
+            print e
+            print traceback.format_exc()
+            result[day] = -1
+    return result
     
 @app.route("/crossword")
 def crossword():
@@ -70,7 +94,6 @@ def crossword():
         ORDER BY WEEKDAY(date);"""
 
     cursor = mysql.connect().cursor()
-    cursor.execute(query)
 
     try:
         cursor.execute(query)
@@ -80,28 +103,51 @@ def crossword():
         print traceback.format_exc()
         data = []
         
-
-    all_days = []
-    for row in data:
-        d = {
-            "day": row[0],
-            "num_complete": row[1],
-            "avg_time": format_time(row[2]),
-            "best_time": format_time(row[3]),
-            "num_wrong": int(round(row[4])),
-            }
-        all_days.append(d)
-
-    data = get_graph_data()
-    print "data", data
+    raw_graph_data = get_graph_data()
+    print "data", raw_graph_data
     graph_data = defaultdict(list)
 
-    for (day_name, date, seconds) in data:
+    for (day_name, date, seconds) in raw_graph_data:
         graph_data[day_name].append((date.isoformat(), seconds))
 
     print "graph_data", graph_data
 
+    all_days = []
+    for row in data:
+        day_name = row[0]
+        
+        d = {
+            "day": day_name,
+            "num_complete": row[1],
+            "avg_time": format_time(row[2]),
+            "best_time": format_time(row[3]),
+            "num_wrong": int(round(row[4])),
+            "median_time":  format_time(get_median(graph_data[day_name]))
+            }
+        all_days.append(d)
+
+
     return render_template('crossword.html', table_data=all_days, graph_data=graph_data)
+
+
+    for (day_name, date, seconds) in raw_graph_data:
+        graph_data[day_name].append((date.isoformat(), seconds))
+
+def get_median(day_list):
+    times = [t[1] for t in day_list]
+    return median(times)
+
+
+
+def median(lst):
+    sorted_lst = sorted(lst)
+    lst_len = len(lst)
+    index = (lst_len - 1) // 2
+
+    if lst_len % 2 == 1:
+        return sorted_lst[index]
+    else:
+        return (sorted_lst[index] + sorted_lst[index + 1])/2.0
 
 def dataForDay(day):
     query = """
