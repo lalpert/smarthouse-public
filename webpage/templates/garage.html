@@ -38,7 +38,28 @@
         <button class="btn btn-success" id="open-sesame">Open</button>
         <button class="btn btn-danger" id="close-sesame">Close</button>
     </div>
+
+    <hr>
+
+<form>
+<p>Add allowed phone number</p>
+  <div class="form-group">
+    <label for="number">Phone number</label>
+    <input type="text" class="form-control" id="number" placeholder="Phone number">
+  </div>
+  <div class="form-group">
+    <label for="password2">Password</label>
+    <input type="password" class="form-control" id="password2" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="starttime">Start time</label>
+    <input type="datetime" class="form-control" id="starttime" placeholder="">
+  </div>
+
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
 </div>
+
 {% endblock %}
 
 {% block bottomscript %}
