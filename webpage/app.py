@@ -200,7 +200,7 @@ therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_ur
 # -- Get status (inside, outside, etc...)
 @app.route("/api/thermostat/status", methods=['GET'])
 def thermostat_status():
-    return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp())
+    return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())
 
 if __name__ == "__main__":
     # TODO: put it behind a real webserver at some point

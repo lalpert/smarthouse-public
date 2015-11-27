@@ -24,6 +24,12 @@ class Thermostat(object):
 	def inside_temp(self):
 		return self.therm_info()['temp']
 
+	def setpoint(self):
+		return self.therm_info()['setpoint']
+
+	def heat_on(self):
+		return bool(self.therm_info()['heat'])
+
 	def outside_temp(self):
 		if self.outside_cache == None or time.time() - self.last_outside_fetch > self.OUTSIDE_REFRESH_SECS:
 			print "Downloading temp from wunderground"
