@@ -9,6 +9,7 @@ from flask import jsonify
 from flaskext.mysql import MySQL
 
 import database_setup
+from Thermostat import Thermostat
 
 mysql = MySQL()
 
@@ -143,6 +144,17 @@ def add_crossword():
     cursor.execute(query, data)
     cxn.commit()
     return "done"
+
+wunderground_url = "http://api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json"
+therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_url)
+### Thermostat
+# Operations:
+# -- Schedule override
+# -- Set temp
+# -- Get status (inside, outside, etc...)
+@app.route("/api/thermostat/status", methods=['GET'])
+def thermostat_status():
+    return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp())
 
 if __name__ == "__main__":
     # TODO: put it behind a real webserver at some point
