@@ -9,9 +9,12 @@ class Thermostat(object):
 	inside_cache = None
 	INSIDE_REFRESH_SECS = 30
 
-	def __init__(self, imp_url, wunderground_url):
+	## TODO: update last_inside_fetch on mutation so it updates without latency
+
+	def __init__(self, imp_url, wunderground_url, password):
 		self.imp_url = imp_url
 		self.wunderground_url = wunderground_url
+		self.password = password
 
 	def therm_info(self):
 		if self.inside_cache == None or time.time() - self.last_inside_fetch > self.INSIDE_REFRESH_SECS:
@@ -38,3 +41,8 @@ class Thermostat(object):
 			self.outside_cache = response.json()['current_observation']['temp_f']
 
 		return self.outside_cache
+
+	def set_override(self, temp, time_minutes):
+		print "Setting temperature to ", temp, "for", time_minutes
+		requests.post(self.imp_url + "/set", json = {"password": self.password, "temp": str(temp)})
+		self.last_inside_fetch = -1

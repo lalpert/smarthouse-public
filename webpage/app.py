@@ -10,6 +10,7 @@ from flaskext.mysql import MySQL
 
 import database_setup
 from Thermostat import Thermostat
+from passwords import *
 
 mysql = MySQL()
 
@@ -192,7 +193,7 @@ def add_crossword():
     return "done"
 
 wunderground_url = "http://api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json"
-therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_url)
+therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_url, IMP_PASSWORD)
 ### Thermostat
 # Operations:
 # -- Schedule override
@@ -201,6 +202,15 @@ therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_ur
 @app.route("/api/thermostat/status", methods=['GET'])
 def thermostat_status():
     return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())
+
+@app.route("/api/thermostat/set", methods=['POST'])
+def set_temp():
+    req_data = request.get_json()
+    if req_data and "temp" in req_data:
+        therm.set_override(req_data["temp"], req_data.get("time_minutes"))
+        return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())
+    else:
+        return jsonify(status = "ERROR", cause = "JSON argument %s was invalid" % req_data)
 
 if __name__ == "__main__":
     # TODO: put it behind a real webserver at some point
