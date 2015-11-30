@@ -12,12 +12,12 @@ import database_setup
 from Thermostat import Thermostat
 from passwords import *
 
-mysql = MySQL()
+#mysql = MySQL()
 
 app = Flask(__name__)
 # Add the database password, username, etc
-database_setup.add_config_params(app)
-mysql.init_app(app)
+#database_setup.add_config_params(app)
+#mysql.init_app(app)
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 

@@ -4,6 +4,7 @@ import requests
 import cfgsrv
 import json 
 
+
 AWAY_TEMP = 60
 NIGHT_TEMP = 60
 HOME_TEMP = 60
@@ -25,6 +26,7 @@ CONFIG_LOC = "config.json"
 
 def get_config():
     data = cfgsrv.deserialize(CONFIG_LOC)
+
     if data:
         return data
     else:

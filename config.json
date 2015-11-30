@@ -1,0 +1,1 @@
+{"overrides": [{"starts": 1448856416.662344, "expires": 1448860016.662344, "temp": 45}], "schedule": [{"hr": 8, "name": "wakeup", "temp": 60}, {"hr": 10, "name": "work", "temp": 60}, {"hr": 19, "name": "home", "temp": 60}, {"hr": 23, "name": "bed", "temp": 60}]}

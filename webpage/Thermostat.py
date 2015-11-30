@@ -1,5 +1,6 @@
 import requests
 import time
+from scheduler import Scheduler
 class Thermostat(object):
 	last_outside_fetch = -1
 	outside_cache = None
@@ -15,6 +16,7 @@ class Thermostat(object):
 		self.imp_url = imp_url
 		self.wunderground_url = wunderground_url
 		self.password = password
+		self.scheduler = Scheduler(self.set_temp)
 
 	def therm_info(self):
 		if self.inside_cache == None or time.time() - self.last_inside_fetch > self.INSIDE_REFRESH_SECS:
@@ -44,5 +46,9 @@ class Thermostat(object):
 
 	def set_override(self, temp, time_minutes):
 		print "Setting temperature to ", temp, "for", time_minutes
-		requests.post(self.imp_url + "/set", json = {"password": self.password, "temp": str(temp)})
+		self.scheduler.add_override(temp, time_minutes)
 		self.last_inside_fetch = -1
+
+	def set_temp(self, temp):
+		requests.post(self.imp_url + "/set", json = {"password": self.password, "temp": str(temp)})
+
