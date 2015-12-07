@@ -194,11 +194,9 @@ def add_crossword():
 
 wunderground_url = "http://api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json"
 therm = Thermostat("https://agent.electricimp.com/Zik1cm6CNOlE", wunderground_url, IMP_PASSWORD)
+
 ### Thermostat
-# Operations:
-# -- Schedule override
-# -- Set temp
-# -- Get status (inside, outside, etc...)
+
 @app.route("/api/thermostat/status", methods=['GET'])
 def thermostat_status():
     return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())

@@ -24,6 +24,7 @@ class Thermostat(object):
 			response = requests.get(self.imp_url + "/status")
 			self.inside_cache = response.json()
 			self.last_inside_fetch = time.time()
+			print "Got temp from imp"
 		return self.inside_cache
 
 	def inside_temp(self):

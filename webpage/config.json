@@ -1,7 +1,0 @@
-{"schedule": [
-	{"hr": 8, "name": "wakeup", "temp": 68}, 
-	{"hr": 10, "name": "work", "temp": 60}, 
-	{"hr": 19, "name": "home", "temp": 66}, 
-	{"hr": 23, "name": "bed", "temp": 60}],
- "overrides" : []
-}

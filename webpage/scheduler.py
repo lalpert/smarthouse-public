@@ -3,6 +3,7 @@ import time
 import requests
 import cfgsrv
 import json 
+from threading import Thread
 
 
 AWAY_TEMP = 60
@@ -28,6 +29,13 @@ CONFIG_LOC = "config.json"
 class Scheduler(object):
     def __init__(self, temp_update_callback):
         self.callback = temp_update_callback
+        self.update_thread = Thread(target = self.update_loop)
+        self.update_thread.start()
+
+    def update_loop(self):
+        while True:
+            self.update_temp()
+            time.sleep(10)
 
     def get_config(self):
         data = cfgsrv.deserialize(CONFIG_LOC)
@@ -48,7 +56,6 @@ class Scheduler(object):
             return start <= hour <= end
 
     def update_temp(self):
-        print self.get_config()
         schedule = self.get_config()["schedule"]
         overrides = self.get_config()["overrides"]
         if not self.update_based_on_override(overrides):
@@ -64,8 +71,6 @@ class Scheduler(object):
                 print "running override", override
                 self.callback(override["temp"])
                 return True
-            else:
-                print "override doesn't apply"
 
         return False
 
@@ -83,5 +88,6 @@ class Scheduler(object):
             start = looped_config[i]
             end = looped_config[i+1]
             if self.hour_in_range(start['hr'], end['hr']):
+                print "Updating to ", start
                 self.callback(start['temp'])
             
