@@ -30,6 +30,7 @@ class Scheduler(object):
     def __init__(self, temp_update_callback):
         self.callback = temp_update_callback
         self.update_thread = Thread(target = self.update_loop)
+        self.update_thread.daemon = True
         self.update_thread.start()
 
     def update_loop(self):

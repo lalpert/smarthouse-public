@@ -212,4 +212,11 @@ def set_temp():
 
 if __name__ == "__main__":
     # TODO: put it behind a real webserver at some point
-    app.run(host='0.0.0.0', port=80, threaded=True, debug=True)
+    from tornado.wsgi import WSGIContainer
+    from tornado.httpserver import HTTPServer
+    from tornado.ioloop import IOLoop
+    #from yourapplication import app
+
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(80)
+    IOLoop.instance().start()
