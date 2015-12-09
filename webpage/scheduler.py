@@ -51,10 +51,12 @@ class Scheduler(object):
 
     def hour_in_range(self, start, end):
         hour = datetime.datetime.now().hour
+        # 23 -> 2
         if start > end:
-            return hour >= start or hour <= end
+            return hour >= start or hour < end
         else:
-            return start <= hour <= end
+            #2 -> 5
+            return start <= hour < end
 
     def update_temp(self):
         schedule = self.get_config()["schedule"]
