@@ -36,7 +36,7 @@ class Scheduler(object):
     def update_loop(self):
         while True:
             self.update_temp()
-            time.sleep(10)
+            time.sleep(60)
 
     def get_config(self):
         data = cfgsrv.deserialize(CONFIG_LOC)
