@@ -71,15 +71,15 @@
         return num + " °F";
     }
     console.log("running script");
-    var status_url = "https://agent.electricimp.com/Zik1cm6CNOlE/status";
-    var set_url = "https://agent.electricimp.com/Zik1cm6CNOlE/set";
+    var status_url = "/api/thermostat/status";
+    var set_url = "/api/thermostat/update";
     var update_settings = function() {
         $.ajax(status_url, {
             "dataType": "json"
-        })
-        .done(function(data) {
-            $('#temp').text(format_num(data['temp'], true));
+        }).done(function(data) {
+            $('#temp').text(format_num(data['inside'], true));
             $('#setpoint').text(format_num(data['setpoint'], false));
+            $('#outtemp').text(format_num(data['outside'], true));
             if (data['heat'] == 0) {
                 $('#heaton').text("Off");
             } else {
@@ -88,23 +88,15 @@
         });
     };
 
-    var update_outside = function() {
-        var wunderground_url = "http://api.wunderground.com/api/78cca52724e6929e/conditions/q/CA/Redwood_City.json";
-        $.get(wunderground_url, {
-           dataType: "json"
-        }).done(function(data) {
-            $('#outtemp').text(format_num(data['current_observation']['temp_f'], true));
-        });
-    }
-
     var get_json = function(temp) {
         return { password: $('#password').val(), temp: temp + ''};
     }
 
     var set_temp = function(temp) {
         var json = get_json(temp);
-        $.ajax(set_url, {data: JSON.stringify(json), dataType: "json", method: "POST"});
+        $.ajax({url: set_url, contentType: "application/json", data: JSON.stringify(json), dataType: "json", method: "POST"});
     }
+
     var update_setpoint = function(diff) {
         var current = parseInt($('#setpoint').text());
         var password = $('#password').val();
@@ -126,9 +118,7 @@
     });
 
     $(update_settings);
-    $(update_outside);
     window.setInterval(update_settings, 5000);
-    window.setInterval(update_outside, 5 * 60 * 1000);
 </script>
 {% endblock %}
 

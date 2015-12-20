@@ -12,12 +12,12 @@ import database_setup
 from Thermostat import Thermostat
 from passwords import *
 
-#mysql = MySQL()
+mysql = MySQL()
 
 app = Flask(__name__)
 # Add the database password, username, etc
-#database_setup.add_config_params(app)
-#mysql.init_app(app)
+database_setup.add_config_params(app)
+mysql.init_app(app)
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -209,6 +209,16 @@ def set_temp():
         return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())
     else:
         return jsonify(status = "ERROR", cause = "JSON argument %s was invalid" % req_data)
+
+@app.route("/api/thermostat/update", methods=['POST'])
+def set_temp_password():
+    req_data = request.get_json()
+    if req_data and "temp" in req_data and req_data["password"] == IMP_PASSWORD:
+        therm.set_override(req_data["temp"], req_data.get("time_minutes"))
+        return jsonify(inside = therm.inside_temp(), outside = therm.outside_temp(), setpoint = therm.setpoint(), heat_on = therm.heat_on())
+    else:
+        return jsonify(status = "ERROR", cause = "JSON argument %s was invalid" % req_data)
+    
 
 if __name__ == "__main__":
     # TODO: put it behind a real webserver at some point
