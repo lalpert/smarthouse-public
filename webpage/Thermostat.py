@@ -53,6 +53,5 @@ class Thermostat(object):
     	self.last_inside_fetch = -1
     
     def set_temp(self, temp):
-    	pass
-        # requests.post(self.imp_url + "/set", json = {"password": self.password, "temp": str(temp)})
+        requests.post(self.imp_url + "/set", json = {"password": self.password, "temp": str(temp)})
     
