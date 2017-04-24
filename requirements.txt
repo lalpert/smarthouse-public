@@ -9,3 +9,4 @@ wsgiref==0.1.2
 tornado==4.3
 requests==2.8.1
 
+trequests==0.9.5

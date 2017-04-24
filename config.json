@@ -1,9 +1,9 @@
 {
   "overrides": [
     {
-      "starts": -1, 
-      "expires": -1, 
-      "temp": -1
+      "starts": 1450649242.802688, 
+      "expires": 1450652842.802688, 
+      "temp": "74"
     }
   ], 
   "schedule": [

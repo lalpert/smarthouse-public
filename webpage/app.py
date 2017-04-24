@@ -9,7 +9,7 @@ from flask import jsonify
 from flaskext.mysql import MySQL
 
 import database_setup
-from Thermostat import Thermostat
+from thermostat import Thermostat
 from passwords import *
 
 mysql = MySQL()
@@ -225,7 +225,10 @@ if __name__ == "__main__":
     from tornado.wsgi import WSGIContainer
     from tornado.httpserver import HTTPServer
     from tornado.ioloop import IOLoop
+    from trequests import setup_session
+    setup_session()
     #from yourapplication import app
+
 
     http_server = HTTPServer(WSGIContainer(app))
     http_server.listen(80)
