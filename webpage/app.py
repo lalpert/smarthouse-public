@@ -178,8 +178,12 @@ def add_crossword():
         print "ALREADY HAVE STATS FOR", date, result
         return "nop"
 
-    # Parse time string like 1:02:58 into a number of seconds
-    t = datetime.strptime(time_string,"%H:%M:%S")
+    if time_string.count(':') == 2:
+        # Parse time string like 1:02:58 into a number of seconds
+        t = datetime.strptime(time_string,"%H:%M:%S")
+    else:
+        t = datetime.strptime(time_string,"%M:%S")
+
     time = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second).total_seconds()
     data = (date, time, num_wrong)
 
