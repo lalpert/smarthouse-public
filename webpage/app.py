@@ -10,7 +10,6 @@ from flaskext.mysql import MySQL
 
 import database_setup
 from thermostat import Thermostat
-from passwords import *
 
 mysql = MySQL()
 
@@ -18,6 +17,7 @@ app = Flask(__name__)
 # Add the database password, username, etc
 database_setup.add_config_params(app)
 mysql.init_app(app)
+IMP_PASSWORD = os.environ['IMP_PASSWORD'] 
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 

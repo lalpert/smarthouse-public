@@ -1,6 +1,7 @@
 # Don't commit passwords!
 passwords.py
 passwords.js
+.env
 
 # Other things...
 *.pyc
