@@ -1,25 +1,30 @@
 from datetime import datetime, timedelta, date
 from collections import defaultdict
 import traceback
+import os
 
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from flaskext.mysql import MySQL
-
 import database_setup
 from thermostat import Thermostat
 
-mysql = MySQL()
+# Add the database password, username, etc
+def init_db(app, run_db):
+    if run_db:
+        mysql = MySQL()
+        database_setup.add_config_params(app)
+        mysql.init_app(app)
+
+
+RUN_DB = os.environ.get('RUN_DB', True)
+if RUN_DB in ["False", "false", "0"]:
+    RUN_DB = False
+IMP_PASSWORD = os.environ['IMP_PASSWORD'] 
+DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 app = Flask(__name__)
-# Add the database password, username, etc
-database_setup.add_config_params(app)
-mysql.init_app(app)
-IMP_PASSWORD = os.environ['IMP_PASSWORD'] 
+#init_db(app, RUN_DB)
 
-DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 @app.route("/")
 def home():
@@ -83,6 +88,10 @@ def median():
     
 @app.route("/crossword")
 def crossword():
+
+    if not RUN_DB:
+        return redirect('/')
+
     query = """
         SELECT 
         DAYNAME(date) as day_name,
@@ -132,14 +141,9 @@ def crossword():
     return render_template('crossword.html', table_data=all_days, graph_data=graph_data)
 
 
-    for (day_name, date, seconds) in raw_graph_data:
-        graph_data[day_name].append((date.isoformat(), seconds))
-
 def get_median(day_list):
     times = [t[1] for t in day_list]
     return median(times)
-
-
 
 def median(lst):
     sorted_lst = sorted(lst)
