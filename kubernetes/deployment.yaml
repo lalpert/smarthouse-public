@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smarthouse-deployment
+  labels:
+    app: smarthouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smarthouse
+  template:
+    metadata:
+      labels:
+        app: smarthouse
+    spec:
+      containers:
+      - name: smarthouse
+        image: gcr.io/trailfinder-1536773117692/smarthouse:v0
+        env:
+          - name: MYSQL_DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: smarthouse-secret
+                key: MYSQL_DATABASE_USER
+          - name: MYSQL_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: smarthouse-secret
+                key: MYSQL_DATABASE_PASSWORD
+          - name: IMP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: smarthouse-secret
+                key: IMP_PASSWORD
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: smarthouse-service
+spec:
+  type: NodePort
+  selector:
+    app: smarthouse
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
