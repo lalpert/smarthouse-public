@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: smarthouse
-        image: gcr.io/trailfinder-1536773117692/smarthouse:v0
+        image: gcr.io/trailfinder-1536773117692/smarthouse
         env:
           - name: MYSQL_DATABASE_USER
             valueFrom:

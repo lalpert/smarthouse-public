@@ -2,13 +2,12 @@ import datetime
 import time
 import requests
 import cfgsrv
-import json 
+import json
 from threading import Thread
-
 
 AWAY_TEMP = 60
 NIGHT_TEMP = 60
-HOME_TEMP = 60
+HOME_TEMP = 69
 
 WAKEUP_HR = 8
 WORK_HR = 10
@@ -16,12 +15,12 @@ HOME_HR = 19
 BED_HR = 23
 
 DEFAULT_CONFIG = {"schedule": [
-                    {"hr": WAKEUP_HR, "temp": AWAY_TEMP, "name": "wakeup"}, 
-                    {"hr": WORK_HR, "temp": AWAY_TEMP, "name": "work"},
-                    {"hr": HOME_HR, "temp": HOME_TEMP, "name": "home"},
-                    {"hr": BED_HR, "temp": NIGHT_TEMP, "name": "bed"}],
-                  "overrides": [{"temp": -1, "expires": -1, "starts": -1}]
-                 }
+    {"hr": WAKEUP_HR, "temp": HOME_TEMP, "name": "wakeup"},
+    {"hr": WORK_HR, "temp": AWAY_TEMP, "name": "work"},
+    {"hr": HOME_HR, "temp": HOME_TEMP, "name": "home"},
+    {"hr": BED_HR, "temp": NIGHT_TEMP, "name": "bed"}],
+    "overrides": [{"temp": -1, "expires": -1, "starts": -1}]
+}
 
 CONFIG_LOC = "config.json"
 
@@ -29,7 +28,7 @@ CONFIG_LOC = "config.json"
 class Scheduler(object):
     def __init__(self, temp_update_callback):
         self.callback = temp_update_callback
-        self.update_thread = Thread(target = self.update_loop)
+        self.update_thread = Thread(target=self.update_loop)
         self.update_thread.daemon = True
         self.update_thread.start()
 
@@ -44,10 +43,9 @@ class Scheduler(object):
         if data:
             return data
         else:
-            print "writing default"
+            print("writing default")
             cfgsrv.serialize(DEFAULT_CONFIG, CONFIG_LOC)
             return DEFAULT_CONFIG
-
 
     def hour_in_range(self, start, end):
         hour = datetime.datetime.now().hour
@@ -55,7 +53,7 @@ class Scheduler(object):
         if start > end:
             return hour >= start or hour < end
         else:
-            #2 -> 5
+            # 2 -> 5
             return start <= hour < end
 
     def update_temp(self):
@@ -71,7 +69,7 @@ class Scheduler(object):
         now = self.now()
         for override in overrides:
             if override["expires"] > now and override["starts"] < now:
-                print "running override", override
+                print("running override", override)
                 self.callback(override["temp"])
                 return True
 
@@ -84,13 +82,11 @@ class Scheduler(object):
         cfgsrv.serialize(current_config, CONFIG_LOC)
         self.update_temp()
 
-
     def update_based_on_schedule(self, schedule):
         looped_config = schedule + [schedule[0]]
         for i in range(len(looped_config) - 1):
             start = looped_config[i]
-            end = looped_config[i+1]
+            end = looped_config[i + 1]
             if self.hour_in_range(start['hr'], end['hr']):
-                print "Updating to ", start
+                print("Updating to ", start)
                 self.callback(start['temp'])
-            

@@ -80,7 +80,7 @@
             $('#temp').text(format_num(data['inside'], true));
             $('#setpoint').text(format_num(data['setpoint'], false));
             $('#outtemp').text(format_num(data['outside'], true));
-            if (data['heat'] == 0) {
+            if (!data['heat']) {
                 $('#heaton').text("Off");
             } else {
                 $('#heaton').text("On");

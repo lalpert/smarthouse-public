@@ -36,7 +36,7 @@ def get_config():
 def set_temp(temp, password):
     arg = {"temp": temp, "password": password}
     result = requests.post(SET_URL, json.dumps(arg))
-    print result.json(), str(datetime.datetime.now())
+    print(result.json(), str(datetime.datetime.now()))
 
 
 def hour_in_range(start, end):
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         try:
             update_temp(password)
         except Exception as e:
-            print "Error updating temperature", e
+            print("Error updating temperature", e)
         finally:
             time.sleep(60)
 

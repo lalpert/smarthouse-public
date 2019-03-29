@@ -4,8 +4,8 @@ const crosswordBaseUrl = "https://www.nytimes.com/crosswords/game/daily/";
 
 const crosswordUrl = (year, month, day) =>
   `${crosswordBaseUrl}/${year}/${month}/${day}`;
-const username = "leah.alpert@gmail.com";
-const password = "frog22";
+const username = "margaret.cunniff@gmail.com";
+const password = "nytimes";
 const lazy = "https://www.nytimes.com/crosswords/game/daily/2018/04/05";
 const rp = require('request-promise');
 /*
@@ -20,9 +20,9 @@ const rp = require('request-promise');
   await page.click("#submitButton");
   await page.waitForNavigation();
 
-  const numDays = 7;
+  const numDays = 900;
   // TODO: handle errors.
-  for (let i = 1; i < numDays; i++) {
+  for (let i = 126; i < numDays; i++) {
     await processDay(i, page);
   }
 })();

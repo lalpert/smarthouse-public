@@ -1,16 +1,11 @@
 {
   "overrides": [
-    {
-      "starts": 1450649242.802688, 
-      "expires": 1450652842.802688, 
-      "temp": "74"
-    }
-  ], 
+  ],
   "schedule": [
     {
       "hr": 8, 
       "name": "wakeup", 
-      "temp": 60
+      "temp": 71
     }, 
     {
       "hr": 10, 
@@ -20,7 +15,7 @@
     {
       "hr": 19, 
       "name": "home", 
-      "temp": 60
+      "temp": 68
     }, 
     {
       "hr": 23, 

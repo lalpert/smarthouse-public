@@ -4,16 +4,15 @@ import traceback
 import os
 
 from flask import Flask, render_template, request, jsonify, redirect
-from flaskext.mysql import MySQL
 import database_setup
 from thermostat import Thermostat
 
 # Add the database password, username, etc
-def init_db(app, run_db):
-    if run_db:
-        mysql = MySQL()
-        database_setup.add_config_params(app)
-        mysql.init_app(app)
+#def init_db(app, run_db):
+#    if run_db:
+#        mysql = MySQL()
+#        database_setup.add_config_params(app)
+#        mysql.init_app(app)
 
 
 RUN_DB = os.environ.get('RUN_DB', True)
@@ -81,8 +80,8 @@ def median():
             data = cursor.fetchall()
             result[day] = data
         except mysql.connector.Error as e:
-            print e
-            print traceback.format_exc()
+            print(e)
+            print(traceback.format_exc())
             result[day] = -1
     return result
     
@@ -110,18 +109,18 @@ def crossword():
         cursor.execute(query)
         data = cursor.fetchall()
     except mysql.connector.Error as e:
-        print e
-        print traceback.format_exc()
+        print(e)
+        print(traceback.format_exc())
         data = []
         
     raw_graph_data = get_graph_data()
-    print "data", raw_graph_data
+    print("data", raw_graph_data)
     graph_data = defaultdict(list)
 
     for (day_name, date, seconds) in raw_graph_data:
         graph_data[day_name].append((date.isoformat(), seconds))
 
-    print "graph_data", graph_data
+    print("graph_data", graph_data)
 
     all_days = []
     for row in data:
@@ -163,8 +162,8 @@ def dataForDay(day):
 
 @app.route("/api/crosswords", methods=['POST'])
 def add_crossword():
-    print "request", request
-    print request.form
+    print("request", request)
+    print(request.form)
     date = request.form['date']
     time_string = request.form['time']
     num_wrong = request.form['num_wrong']
@@ -177,9 +176,9 @@ def add_crossword():
     data = (date,)
     cursor.execute(query, data)
     result = cursor.fetchone()
-    print "result", result
+    print("result", result)
     if result:
-        print "ALREADY HAVE STATS FOR", date, result
+        print("ALREADY HAVE STATS FOR", date, result)
         return "nop"
 
     if time_string.count(':') == 2:
@@ -229,15 +228,4 @@ def set_temp_password():
     
 
 if __name__ == "__main__":
-    # TODO: put it behind a real webserver at some point
-    from tornado.wsgi import WSGIContainer
-    from tornado.httpserver import HTTPServer
-    from tornado.ioloop import IOLoop
-    from trequests import setup_session
-    setup_session()
-    #from yourapplication import app
-
-
-    http_server = HTTPServer(WSGIContainer(app))
-    http_server.listen(80)
-    IOLoop.instance().start()
+  app.run('0.0.0.0', port=80, debug=True, threaded=True)
